@@ -9,7 +9,7 @@
 
 (defn xml-file? [file] (.contains (.toString file) ".xml"))
 (defn jar-file? [file] (.contains (.toString file) ".jar"))
-(defn isFile? [file] (.isFile file))
+(defn file? [file] (.isFile file))
 
 (defn list-of-xml-files [path] (filter xml-file? (file-seq (File. path))))
 
@@ -24,14 +24,14 @@
   "Returns the md5 hash of the contents of file (where file is a File,
    a FileDescriptor or a String with the file's path"
   [file]
-  (let [input (java.io.FileInputStream. file)
-        digest (java.security.MessageDigest/getInstance "MD5")
+  (with-open [input (java.io.FileInputStream. file)] 
+    (let [digest (java.security.MessageDigest/getInstance "MD5")
         stream (java.security.DigestInputStream. input digest)
         bufsize (* 1024 1024)
         buf (byte-array bufsize)]
-    (println (format "hashing file %s \t%d bytes" file (.length file)))
-    (while (not= -1 (.read stream buf 0 bufsize)))
-    (apply str (map (partial format "%02x") (.digest digest)))))
+      (println (format "hashing file %s \t%d bytes" file (.length file)))
+      (while (not= -1 (.read stream buf 0 bufsize)))
+      (apply str (map (partial format "%02x") (.digest digest))))))
    
 (defn sha1sum
   "Returns the md5 hash of the contents of file (where file is a File,
@@ -42,8 +42,8 @@
         stream (java.security.DigestInputStream. input digest)
         bufsize (* 1024 1024)
         buf (byte-array bufsize)]
-    (while (not= -1 (.read stream buf 0 bufsize)))
-    (apply str (map (partial format "%02x") (.digest digest)))))
+      (while (not= -1 (.read stream buf 0 bufsize)))
+      (apply str (map (partial format "%02x") (.digest digest)))))
  
 (defn digestsum
   "Returns the md5 hash of the contents of file (where file is a File,
@@ -76,7 +76,7 @@
        (apply hash-map (interleave file-list-str md5-list))))
 
 (comment
-(map-file-digest "." isFile? "SHA1")
+(map-file-digest "." file? "SHA1")
 (map-file-digest "." #(.isFile %)  "SHA1")
 )
 
@@ -98,7 +98,9 @@
         present-but-different (:present-but-different parsed-map)]
     
     (println "\n****** FILE DIFFERENCE REPORT: ******")
-    (cl-format nil "~{file ~a is missing in set #1~%~}~{file ~a is missing in set 2~%~}~{~{file ~a is different~%  -> ~a~%  -> ~a~%~}~}"
+    (when (and (= only-k1 #{}) (= only-k2 #{}) (= present-but-different ()))
+      (println "No difference found between the file(s)"))
+    (cl-format nil "~{file ~a is missing in set #1~%~}~{file ~a is missing in set #2~%~}~{~{file ~a is different~%  -> ~a~%  -> ~a~%~}~}"
                only-k2
                only-k1
                present-but-different)))
@@ -108,8 +110,8 @@
   
 
 (defn diff-file-dir [path1 path2]
-  (let [file-map1 (map-file-digest path1 isFile? "SHA1")
-        file-map2 (map-file-digest path2 isFile? "SHA1")
+  (let [file-map1 (map-file-digest path1 file? "SHA1")
+        file-map2 (map-file-digest path2 file? "SHA1")
         parsed-map (diff-set-dir-analysis file-map1 file-map2)]
     (format-file-diff-set parsed-map ))) 
   

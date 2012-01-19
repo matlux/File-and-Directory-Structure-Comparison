@@ -28,6 +28,6 @@ The top level namespace is `net.matlux.filecomparator.core`
 
 ## License
 
-Copyright (C) 20121 Mathieu Gauthron
+Copyright (C) 2012 Mathieu Gauthron
 
 Distributed under the Eclipse Public License, the same as Clojure.
