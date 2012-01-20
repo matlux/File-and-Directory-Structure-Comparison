@@ -68,6 +68,9 @@
   (let [new-string (.substring val length)]
     new-string))
 
+(defn remove-prefix-coll [string-coll length-to-remove]
+  (map #(remove-prefix length-to-remove %) string-coll))
+
 (defn map-file-digest [file-path file-filter digest]
      (let [file-list (list-of-filtered-files file-path file-filter)
            path-length (.length file-path)
