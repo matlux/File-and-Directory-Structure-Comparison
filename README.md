@@ -69,7 +69,7 @@ For the use of the Command Line:
 
 For the re-use of the code:
 
-    Clojure and lein
+   Clojure and lein
 
 ## License
 
