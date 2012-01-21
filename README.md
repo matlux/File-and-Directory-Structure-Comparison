@@ -10,19 +10,20 @@ A commandline written in Clojure that compares two files or two nested directory
 
 ## Command Line Usage
 
-NAME
+### NAME
+
    fileComp.sh -- A file and directory structure comparison tool written in Clojure. Can work locally or remotly over ssh.
 
-SYNOPSIS
+### SYNOPSIS
    fileComp.sh [options] path1 path2
 
-EXAMPLES
+### EXAMPLES
 
    local file comparison:
       fileComp.sh treestructure/tree1 treestructure/tree2
    ssh file comparison:
       fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2
-Usage:
+### Usage:
 
  Switches               Default        Desc                
  --------               -------        ----                
@@ -37,9 +38,11 @@ The top level namespace is `net.matlux.filecomparator.app`
     (use 'net.matlux.filecomparator.app)
 
 local example:
+
     (diff-targets {:proto "local" :path "treestructure/tree1/"} {:proto "local" :path "treestructure/tree2/"})
     
 ssh example:    
+
     (diff-targets {:proto "local" :path "treestructure/tree1/"} 
                   {:user nil, :proto "ssh" :hostname "192.168.1.1" 
                    :port 22 :identity "~/.ssh/id_rsa" :path "/tmp/tree2/"})
