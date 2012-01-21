@@ -32,6 +32,21 @@ locally to where the files are stored.
    ssh file comparison:
    
     fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2
+    
+   Output example:
+   
+****** FILE DIFFERENCE REPORT: ******
+   
+file exampledir/file-only-in-2 is missing in set #1
+
+file file-only-in-1 is missing in set #2
+
+file file-dif-2 is different
+
+  -> c192af7146baeed80082973f4ebaa88f
+  
+  -> ded88e1100bee63f181b98a80e35d91b
+  
       
 ### Usage:
 
