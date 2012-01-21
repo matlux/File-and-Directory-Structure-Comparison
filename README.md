@@ -27,11 +27,11 @@ locally to where the files are stored.
 
    local file comparison:
    
-      `fileComp.sh treestructure/tree1 treestructure/tree2`
+    fileComp.sh treestructure/tree1 treestructure/tree2
       
    ssh file comparison:
    
-      `fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2`
+    fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2
       
 ### Usage:
 
