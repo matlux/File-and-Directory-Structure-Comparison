@@ -25,11 +25,11 @@ A commandline written in Clojure that compares two files or two nested directory
       fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2
 ### Usage:
 
- Switches               Default        Desc                
- --------               -------        ----                
- -p, --port             22             not implemented yet 
- -h, --no-help, --help  false          Show help           
- -i, --identity         ~/.ssh/id_rsa  ssh key is required comparison over ssh                    
+   Switches               Default        Desc
+             
+   -p, --port             22             not implemented yet 
+   -h, --no-help, --help  false          Show help           
+   -i, --identity         ~/.ssh/id_rsa  ssh key is required comparison over ssh                    
 
 ## Code Usage
 
