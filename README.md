@@ -65,11 +65,11 @@ ssh example:
 
 For the use of the Command Line:
 
-	java version 6 -- (command-line installed on the path)
+   java version 6 -- (command-line installed on the path)
 
 For the re-use of the code:
 
-	Clojure and lein
+    Clojure and lein
 
 ## License
 
