@@ -1,4 +1,4 @@
-# File-and-Directory-Structure-Comparison
+# Remote File and Directory Structure Comparison Tool
 
 A command-line written in Clojure that compares two files or two nested directory structures on local files or
 remotely with an md2sum command over ssh (requires the use of an ssh identity key). MD5 hashing (locally or remotely)
@@ -18,7 +18,7 @@ locally to where the files are stored.
 
 ### NAME
 
-   fileComp.sh -- A file and directory structure comparison tool written in Clojure. Can work locally or remotly over ssh.
+   fileComp.sh -- A file and directory structure comparison tool written in Clojure. Can work locally or remotely over ssh.
 
 ### SYNOPSIS
    fileComp.sh [options] path1 path2
@@ -37,9 +37,12 @@ locally to where the files are stored.
 
    Switches               Default        Desc
              
-   -p, --port             22             not implemented yet 
-   -h, --no-help, --help  false          Show help           
+   -p, --port             22             not implemented yet
+   
+   -h, --no-help, --help  false          Show help
+              
    -i, --identity         ~/.ssh/id_rsa  ssh key is required comparison over ssh                    
+
 
 ## Code Usage
 
@@ -56,6 +59,17 @@ ssh example:
     (diff-targets {:proto "local" :path "treestructure/tree1/"} 
                   {:user nil, :proto "ssh" :hostname "192.168.1.1" 
                    :port 22 :identity "~/.ssh/id_rsa" :path "/tmp/tree2/"})
+                   
+                   
+## Requirements
+
+For the use of the Command Line:
+
+	java version 6 -- (command-line installed on the path)
+
+For the re-use of the code:
+
+	Clojure and lein
 
 ## License
 
