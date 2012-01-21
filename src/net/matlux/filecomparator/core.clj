@@ -1,5 +1,8 @@
-(ns net.matlux.filecomparator.core
-  )
+;(ns net.matlux.filecomparator.core
+;  (:use [net.matlux.filecomparator.ssh-adapter :only (map-file-digest-via-ssh)]))
+(in-ns 'net.matlux.filecomparator.app)
+
+(declare map-file-digest-via-ssh)
 
 (use '[clojure.java.io :only (reader)])
 (import '(java.io File))
@@ -118,6 +121,17 @@
         parsed-map (diff-set-dir-analysis file-map1 file-map2)]
     (format-file-diff-set parsed-map ))) 
   
+(defmulti digest-target :proto)
+(defmethod digest-target "local" [file-path-target] (map-file-digest (:path file-path-target) file? "SHA1"))
+(defmethod digest-target "ssh" [ssh-path-target]    (map-file-digest-via-ssh ssh-path-target))
+
+
+(defn diff-targets [target1 target2]
+  (let [digested-files1 (digest-target target1)
+        digested-files2 (digest-target target2)
+        parsed-map (diff-set-dir-analysis digested-files1 digested-files2)]
+    (format-file-diff-set parsed-map ))) 
+
   
 (comment
 (diff-file-dir "treestructure/tree1/" "treestructure/tree2/")
