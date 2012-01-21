@@ -1,6 +1,12 @@
 # File-and-Directory-Structure-Comparison
 
-A commandline written in Clojure that compares two files or two nested directory structures. MD5 hashing is used to determine file equality.
+A command-line written in Clojure that compares two files or two nested directory structures on local files or
+remotely with an md2sum command over ssh (requires the use of an ssh identity key). MD5 hashing (locally or remotely)
+is used to determine file equality. The code can also be re-used to integrate into an application that would like to
+check file integrity after a copy or any similar scenario... 
+The use of the remote md5sum cmd over ssh means that only the hash is sent over the network.
+It is therefore very efficient at comparing very large files over a slow WAN because the hashing will be computed
+locally to where the files are stored.
 
 ## Install
 
@@ -20,9 +26,13 @@ A commandline written in Clojure that compares two files or two nested directory
 ### EXAMPLES
 
    local file comparison:
-      fileComp.sh treestructure/tree1 treestructure/tree2
+   
+      `fileComp.sh treestructure/tree1 treestructure/tree2`
+      
    ssh file comparison:
-      fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2
+   
+      `fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2`
+      
 ### Usage:
 
    Switches               Default        Desc
