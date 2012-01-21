@@ -10,16 +10,6 @@
 (load "core")
 (load "ssh_adapter")
 
-(defn parse-url2 [url]
-  (let [reg [#"(\w+)://(.+)@(\w+):(.+)"
-             #"(\w+)@(.+):(.+)"
-             #"(.+):(.+)"
-             #"(.+)"]
-        result (->> (map #(re-seq % url) reg) (filter identity) first first rest reverse 
-          (interleave [:path :hostname :user :proto])
-                   )
-        ]
-    result))
 
 (defn parse-url [url]
   (let [f (fn ([t u h p] [t u h p])
@@ -50,13 +40,22 @@
 (defn parse-cmd-line [& args]
   (let [[options args banner] 
         (cli args
-             ["-p" "--port" "use this port" :parse-fn #(Integer. %) :default 22] 
+             ["-p" "--port" "not implemented yet" :parse-fn #(Integer. %) :default 22] 
              ;["-h" "--host" "The hostname" :default "localhost"]
-             ;["-v" "--[no-]verbose" :default true]
+             ["-h" "--help" "Show help" :default false :flag true]
              ["-i" "--identity" :default "~/.ssh/id_rsa"]
              )
         [source destination] (->> (map parse-url args) (map #(merge options %)))]
-        (when (:help options)
+        (when (or (:help options) (not= (count args) 2))
+          (println "NAME")
+          (println "   fileComp.sh -- A file and directory structure comparison tool written in Clojure. Can work locally or remotely over ssh.\n")
+          (println "SYNOPSIS")
+          (println "   fileComp.sh [options] path1 path2\n")
+          (println "EXAMPLES\n")
+          (println "   local file comparison:")
+          (println "      fileComp.sh treestructure/tree1 treestructure/tree2")
+          (println "   ssh file comparison:")
+          (println "      fileComp.sh --identity /home/username/.ssh/id_rsa treestructure/tree1 ssh://user@hostname:/tmp/treestructure/tree2\n")
           (println banner)
           (System/exit 0))
         (println (format "options=%s\nargs=%s" options args))
