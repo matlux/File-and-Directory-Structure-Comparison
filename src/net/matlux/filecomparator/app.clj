@@ -1,14 +1,11 @@
 (ns net.matlux.filecomparator.app
   (:gen-class)
-  ;(:use net.matlux.filecomparator.core)
+  (:use [net.matlux.filecomparator.core :only (diff-targets)])
   (:use clojure.tools.cli)
   (:use clj-ssh.ssh)
   (:use [clojure.string :only (split)]))
 
-(declare diff-targets)
 
-(load "core")
-(load "ssh_adapter")
 
 
 (defn parse-url [url]
@@ -61,7 +58,8 @@
         (println (format "options=%s\nargs=%s" options args))
         (println (format "source=%s\ndestination=%s" source destination))
         
-        (println (apply diff-targets [source destination]))))
+        (println (time (apply diff-targets [source destination])))
+        (System/exit 0)))
         
 (comment
 (parse-cmd-line "--ssh-identity" "/Users/mathieu/.ssh/id_rsa_no_pass" "treestructure/tree1/" "hostname:treestructure/tree2/")
