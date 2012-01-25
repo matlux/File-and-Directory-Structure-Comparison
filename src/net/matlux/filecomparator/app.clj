@@ -1,6 +1,6 @@
 (ns net.matlux.filecomparator.app
   (:gen-class)
-  (:use [net.matlux.filecomparator.core :only (diff-targets)])
+  (:use [net.matlux.filecomparator.core :only (display-diff-targets)])
   (:use clojure.tools.cli)
   (:use clj-ssh.ssh)
   (:use [clojure.string :only (split)]))
@@ -8,7 +8,14 @@
 
 
 
-(defn parse-url [url]
+(defn
+    #^{:test (fn []
+             (assert (= {:path "/path/number2", :hostname "hostname", :proto "ssh", :user "user"} (parse-url "ssh://user@hostname:/path/number2")))
+             (assert (= {:path "/path/number2", :hostname "hostname", :proto "ssh", :user "user"} (parse-url "user@hostname:/path/number2")))
+             (assert (= {:path "/path/number2", :hostname "hostname", :proto "ssh", :user nil} (parse-url "hostname:/path/number2")))
+             (assert (= {:path "/path/number2", :hostname nil, :proto "local", :user nil} (parse-url "/path/number2")))
+             )}
+  parse-url [url]
   (let [f (fn ([t u h p] [t u h p])
               ([u h p] ["ssh" u h p])
               ([h p] ["ssh" nil h p])
@@ -58,7 +65,7 @@
         (println (format "options=%s\nargs=%s" options args))
         (println (format "source=%s\ndestination=%s" source destination))
         
-        (println (time (apply diff-targets [source destination])))
+        (println (time (apply display-diff-targets [source destination])))
         (System/exit 0)))
         
 (comment

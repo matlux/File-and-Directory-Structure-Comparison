@@ -26,28 +26,36 @@
 (defn apply-nth [f n coll]
   (->> (partition n coll) (mapcat f)))
 
-(defn update-nth2 [f n coll] (mapcat #(update-in (vec %) [(dec n)] f) (partition n coll)))
+(defn
+  #^{:test (fn []
+             (assert (= ["ring1" "ring2" "ring3" "ring4"] (update-nth2 #(apply str (drop 2 %)) 1 ["string1" "string2" "string3" "string4"])))
+             (assert (= ["string1" "ring2" "string3" "ring4"] (update-nth2 #(apply str (drop 2 %)) 2 ["string1" "string2" "string3" "string4"])))
+             (assert (= ["string1" "string2" "ring3" "string4" "string5" "ring6"] (update-nth2 #(apply str (drop 2 %)) 3 ["string1" "string2" "string3" "string4" "string5" "string6"])))
+             (assert (= [1 3 3 5 5 7] (update-nth2 inc 2 [1 2 3 4 5 6])))
+             (assert (= [1 2 4 4 5 7] (update-nth2 inc 3 [1 2 3 4 5 6])))
+             )}
+    update-nth2 [f n coll] (mapcat #(update-in (vec %) [(dec n)] f) (partition n coll)))
 
-(defn update-nth [f n coll]
+(defn 
+  #^{:test (fn []
+             (assert (= ["ring1" "ring2" "ring3" "ring4"] (update-nth #(apply str (drop 2 %)) 1 ["string1" "string2" "string3" "string4"])))
+             (assert (= ["ring1" "string2" "ring3" "string4"] (update-nth #(apply str (drop 2 %)) 2 ["string1" "string2" "string3" "string4"])))
+             (assert (= ["ring1" "string2" "string3" "ring4" "string5" "string6"] (update-nth #(apply str (drop 2 %)) 3 ["string1" "string2" "string3" "string4" "string5" "string6"])))
+             (assert (= [2 2 4 4 6 6] (update-nth inc 2 [1 2 3 4 5 6])))
+             (assert (= [2 2 3 5 5 6] (update-nth inc 3 [1 2 3 4 5 6])))
+             )}
+  update-nth [f n coll]
      (let [f2 (fn [[a & restcoll]] (cons (f a) restcoll))
            ]
        (apply-nth f2 n coll)))
 
-;(defn update-nth [f n coll]
-;     (let [f2 (fn [[a & restcoll]] (cons (f a) restcoll))
-;           ]
-;       (apply-nth f2 n coll)))
 
 (defn convert-md5-result-into-hash-map [raw-string  to-drop]
   (let [s (->> (split raw-string #"\n+") (map #(split % #"\s+" 2)) (apply concat)) ;(split raw-string #"\s+")
         d #(->> (drop to-drop %) (apply str))]
     (->> (apply-nth reverse 2 s) (update-nth d 2) (apply hash-map))))
 
-;(defn convert-md5-result-into-hash-map [raw-string  prefix-length]
-;  (let [s (split raw-string #"\s+")]
-;  (apply hash-map (permutate-pairs-and-remove-prefix s prefix-length))))
 
-(def bleep 7)
 (defn raw-ssh-cmd [ssh-path cmd]
   (with-ssh-agent []
     (add-identity (:identity ssh-path))
