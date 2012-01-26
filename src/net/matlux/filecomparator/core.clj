@@ -20,8 +20,8 @@
 
 
 (defn
-  #^{:test (fn [] (let [hostname "192.168.1.1"
-                        identity-path "~/.ssh/id_rsa"]
+  #^{:test (fn [] (let [hostname "192.168.77.14"
+                        identity-path "/Users/mathieu/.ssh/id_rsa_no_pass"]
          (assert (= {:only-k2 #{}, :only-k1 #{}, :present-but-different ()}
                     (diff-targets {:user nil, :proto "local"
                               :hostname nil :port 22 :identity nil 
